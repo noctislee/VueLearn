@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+<div id="box">
+    <aaa>
+
+    </aaa>
+</div>
+<script>
+    var Aaa = Vue.extend({
+        data(){
+            return {
+                msg:'woshibiaoti '
+            };
+        },
+        methods:{
+            change(){
+                alert(1)
+            },
+        },
+        template:"<h3 @click ='change()'>{{msg}}</h3>"
+    });
+    Vue.component('aaa',Aaa);
+var Vm = new Vue({
+    el:'#box'
+});
+
+</script>
+
+<div id="box2">
+ <sss>
+
+ </sss>
+</div>
+<script>
+    var Aa = Vue.extend({
+        template:"woshi daixang "
+    });
+    var vm = new Vue({
+        el:"#box2",
+        data:{
+
+        },
+        components:{
+            'sss':Aa,
+        }
+    });
+</script>
+
+<div id="box3">
+    <my-a>
+
+    </my-a>
+</div>
+<script>
+    var vm = new Vue({
+        el:"#box3",
+        components:{
+            'my-a':{
+                data(){
+                  return {
+                      msg:"大象"
+                  }
+                },
+                methods:{
+                    change(){
+                        this.msg = "大象变化"
+                    }
+                },
+                template:"<p @click='change()'>{{msg}}</p>",
+            }
+        }
+
+    });
+</script>
+
+<!--组件嵌套 -->
+<div id="box1">
+    <aaa>
+    </aaa>
+</div>
+
+<template id="aaa">
+    <h1>11111</h1>
+    <bbb :mmm="msg2" :my-msg="msg"></bbb>
+</template>
+<script>
+    var vm=new Vue({
+        el:'#box',
+        data:{
+            a:'aaa'
+        },
+        components:{
+            'aaa':{
+                data(){
+                    return {
+                        msg:111,
+                        msg2:'我是父组件的数据'
+                    }
+                },
+                //TODO
+                //<bbb :m="数据"></bbb>
+                //props:['m','myMsg']
+                components:{
+                    'bbb':{
+                        props:{
+                            'mmm':String,
+                            'myMsg':Number
+                        },
+                        template:'<h3>我是bbb组件->{{mmm}} <br> {{myMsg}}</h3>'
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+<!--子组件接受-->
+<div id="box2">
+    <aaa>
+    </aaa>
+</div>
+
+<template id="aaa">
+    <span>我是父级 -> {{msg}}</span>
+    <bbb @child-msg="get"></bbb>
+</template>
+<template id="bbb">
+    <h3>子组件-</h3>
+    <input type="button" value="send" @click="send">
+</template>
+<script>
+    var vm=new Vue({
+        el:'#box',
+        data:{
+            a:'aaa'
+        },
+        components:{
+            'aaa':{
+                data(){
+                    return {
+                        msg:111,
+                        msg2:'我是父组件的数据'
+                    }
+                },
+                template:'#aaa',
+                methods:{
+                    get(msg){
+                        // alert(msg);
+                        this.msg=msg;
+                    }
+                },
+                components:{
+                    'bbb':{
+                        data(){
+                            return {
+                                a:'我是子组件的数据'
+                            }
+                        },
+                        template:'#bbb',
+                        methods:{
+                            send(){
+                                //TODO
+                                // vm.$emit(事件名,子数据);
+                                //v-on:	@(事件名) = '';
+                                this.$emit('child-msg',this.a);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+
+</html>
